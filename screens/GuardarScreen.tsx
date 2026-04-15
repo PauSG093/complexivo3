@@ -21,6 +21,11 @@ export default function GuardarScreen() {
             fecha: fecha
         }
     });
+
+    settitulo("")
+    setdescripcion("")
+    setfecha("")
+
 }
 
     function leerUID(){
