@@ -1,10 +1,68 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Button, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { TextInput } from "react-native-gesture-handler";
+import { ref, set } from "firebase/database";
+import { auth, db } from "../firebase/Config";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function GuardarScreen() {
+
+    const [titulo, settitulo] = useState("")
+    const [descripcion, setdescripcion] = useState("")
+    const [fecha, setfecha] = useState("")
+
+    const[id, setid] = useState("")
+
+    function guardarUsuario() {
+      set(ref(db, 'usuarios/' + id), {
+        notas: {
+            titulo: titulo,
+            descripcion: descripcion,
+            fecha: fecha
+        }
+    });
+}
+
+    function leerUID(){
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const uid = user.uid;
+                setid(uid);
+    
+            } else {
+
+
+            }
+        });
+    }
+
+    useEffect(()=> {
+        leerUID()
+    }, [])
+        
+
     return (
         <View>
             <Text>GuardarScreen</Text>
+
+            <TextInput
+            placeholder='Ingresa titulo'
+            onChangeText={settitulo}
+            />
+            <TextInput
+            placeholder='Ingresa titulo'
+            onChangeText={setdescripcion}
+
+            />
+            <TextInput
+            placeholder='Ingresa titulo'
+            onChangeText={setfecha}
+            />
+
+            <Button title='guardar' onPress={guardarUsuario} />  
+
+
+
         </View>
     );
 }

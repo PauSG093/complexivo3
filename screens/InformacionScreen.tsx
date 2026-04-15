@@ -30,6 +30,7 @@ export default function InformacionScreen() {
         });
     }
 
+
     function cerrarSesion(){
       signOut(auth).then(() => {
         }).catch((error) => {
