@@ -1,10 +1,54 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {Button,StyleSheet, Text, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth, db } from '../firebase/Config';
+import { onValue, ref, set } from 'firebase/database';
 
 export default function InformacionScreen() {
+
+    const [usuario, setusuario] = useState({avatar:"", edad:""})
+
+    function leerUsuario(){
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const uid = user.uid;
+                //console.log(uid);
+                getusuario(uid)
+            } else {
+
+            }
+        });
+    }
+
+    function getusuario(uid: string){
+        const starCountRef = ref(db, 'usuarios/' + uid);
+        onValue(starCountRef, (snapshot) => {
+            const data = snapshot.val();
+            //console.log(data);
+            setusuario(data)
+            console.log(usuario);
+        });
+    }
+
+    function cerrarSesion(){
+      signOut(auth).then(() => {
+        }).catch((error) => {
+        });
+    }
+
+
+
+    useEffect(() => {
+        leerUsuario()
+    }, [])
+
     return (
         <View>
             <Text>InformacionScreen</Text>
+            <Text>NOMBRE: {usuario.avatar}</Text>
+            <Text>EDAD: {usuario.edad}</Text>
+
+            <Button title='Salir de la sesion' onPress={cerrarSesion}/>
         </View>
     );
 }
