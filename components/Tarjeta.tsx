@@ -1,6 +1,7 @@
 import { Button, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { FlatList, Switch } from 'react-native-gesture-handler';
+import Positivo from './Positivo';
 
 export default function Tarjeta({datos}: any) {
 
@@ -35,12 +36,11 @@ export default function Tarjeta({datos}: any) {
                         value={positivo} 
                         onChange={()=> setpositivo(!positivo)}
                     />
-                
                     <Text>Negativos</Text>
                 </View>
                 {
                     positivo == true
-                    ?<Text>Comentarios positivo</Text>
+                    ?<Positivo comentarios = {datos.opiniones.opiniones_positivas.detalles}/>
                     : <FlatList
                         data={datos.opiniones.opiniones_negativas.detalles}
                         renderItem={({item})=>   
